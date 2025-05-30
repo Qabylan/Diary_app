@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2>Add New Entry</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <textarea class="form-control" name="text" rows="5" placeholder="Write your thoughts..."></textarea><br>
+        <button class="btn btn-primary" type="submit">Save Entry</button>
+    </form>
+</div>
+{% endblock %}

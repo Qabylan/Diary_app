@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h2 class="title">Add Memory</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- Карта -->
+        <div id="map" style="height: 400px;"></div>
+
+        <br>
+        <button class="button is-primary" type="submit">Submit</button>
+    </form>
+</div>
+
+<!-- Leaflet.js CSS и JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const defaultLoc = [43.238949, 76.889709];  // Алматы
+        const map = L.map('map').setView(defaultLoc, 13);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        let marker = L.marker(defaultLoc, { draggable: true }).addTo(map);
+
+        function updateLatLng(lat, lng) {
+            document.querySelector('input[name="latitude"]').value = lat;
+            document.querySelector('input[name="longitude"]').value = lng;
+        }
+
+        updateLatLng(defaultLoc[0], defaultLoc[1]);
+
+        map.on('click', function (e) {
+            marker.setLatLng(e.latlng);
+            updateLatLng(e.latlng.lat, e.latlng.lng);
+        });
+
+        marker.on('dragend', function () {
+            const pos = marker.getLatLng();
+            updateLatLng(pos.lat, pos.lng);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <h2 class="title">My Memories</h2>
+    <a href="{% url 'add_memory' %}" class="button is-primary">Add Memory</a>
+    <br><br>
+
+    {% for memory in memories %}
+    <div class="box">
+        <p><strong>{{ memory.date_added }}</strong></p>
+        <p>{{ memory.description }}</p>
+
+        {% if memory.image %}
+        <img src="{{ memory.image.url }}" style="max-width: 300px;">
+        {% endif %}
+
+        {% if memory.latitude and memory.longitude %}
+        <p><strong>Coordinates:</strong> {{ memory.latitude }}, {{ memory.longitude }}</p>
+        {% endif %}
+
+    </div>
+    {% empty %}
+    <p>No memories yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

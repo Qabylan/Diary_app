@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    /* Кастомные стили для правого блока */
+    .user-logout-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+    }
+    /* Стили для кнопок в разделе записей */
+    .entry-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<section class="hero is-primary" style="position: relative;">  <!-- Добавляем relative для позиционирования -->
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">
+                Dear Diary
+            </h1>
+            <!-- Контейнер для юзернейма и кнопки выхода -->
+            <div class="user-logout-container">
+                <h3>{{ user.username }}</h3>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="button is-danger is-light">Logout</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="entry-buttons">
+            <button class="button is-primary" onclick="window.location.href='{% url 'add' %}'">
+                Add new entry
+            </button>
+            <button class="button is-info" onclick="window.location.href='{% url 'memories' %}'">
+                Memories
+            </button>
+        </div>
+
+        {% for entry in entries %}
+        <article class="media">
+            <div class="media-content">
+                <div class="content">
+                    <p>
+                        <strong>{{ entry.date_posted }}</strong><br>
+                        {{ entry.text }}
+                    </p>
+                </div>
+            </div>
+        </article>
+        {% empty %}
+        <p>No entries yet.</p>
+        {% endfor %}
+    </div>
+</section>
+<footer class="footer"></footer>
+{% endblock %}
